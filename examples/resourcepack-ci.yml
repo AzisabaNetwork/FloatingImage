@@ -1,0 +1,52 @@
+# リソースパックリポジトリ (例: resourcepacks-life) の .github/workflows/ 用
+# 既存の CI の checkout 直後に「ここから追加」の 2 ステップを足したもの
+#
+# リポジトリに追加するもの:
+#   floatingimage/images/*.png   画像 (pack.mcmeta が無いので zip にはならない)
+#   tools/FloatingImage.jar      このプラグインの *-all.jar
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  # 画像を組み込むリソースパックのフォルダ名 (pack.mcmeta があるフォルダ)
+  FLOATINGIMAGE_PACK: mypack
+
+jobs:
+  build_and_release:
+    permissions:
+      contents: write
+    name: ビルド & リリース
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      # ---- ここから追加 ----
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: FloatingImage の画像をリソースパックに変換する
+        run: java -jar tools/FloatingImage.jar generate --images floatingimage/images --out "$FLOATINGIMAGE_PACK"
+      # ---- ここまで追加 ----
+
+      - name: リソースパックとして機能するディレクトリを見つける
+        run: find . -mindepth 2 -maxdepth 2 -type f -iname pack.mcmeta | parallel echo {//} > pack.txt
+
+      - name: 見つけたディレクトリからリソースパックの作成
+        run: parallel -a pack.txt --wd {} zip -r "$PWD"/{/}.zip .
+
+      - name: 作成したリソースパックを表示する
+        run: find . -maxdepth 1 -type f -name "*.zip"
+
+      - uses: softprops/action-gh-release@v0.1.15
+        with:
+          tag_name: action-v${{ github.run_number }}
+          files: '*.zip'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

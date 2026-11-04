@@ -1,0 +1,19 @@
+name: FloatingImage
+version: '${version}'
+main: net.azisaba.floatingimage.FloatingImage
+api-version: '1.21.11'
+load: POSTWORLD
+authors: [ Azisaba Network ]
+website: https://github.com/AzisabaNetwork/FloatingImage
+description: 空中に浮かび、プレイヤーの方を向く画像を表示します
+commands:
+    fimg:
+        description: 画像を表示する
+        usage: /fimg <place|remove|reload|list> ...
+        permission: floatingimage.admin
+        aliases:
+          - floatingimage
+permissions:
+  floatingimage.admin:
+    description: /fimg コマンドを使用できる
+    default: op

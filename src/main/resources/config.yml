@@ -1,0 +1,36 @@
+# 画像の読み込み方法
+#   remote: 配布中のリソースパック zip から assets/floatingimage/index.json を読む (推奨)
+#           画像の変換はリソースパックリポジトリの GitHub Actions で行う
+#   local:  plugins/FloatingImage/images/ の画像からサーバー上でリソースパックを生成する
+source: remote
+
+# 起動時に画像一覧を読み込む
+load-on-enable: true
+
+remote:
+  # 画像を組み込んだリソースパック zip の URL。空なら server.properties の resource-pack を使う
+  # 例: https://github.com/<owner>/<repo>/releases/latest/download/<パック名>.zip
+  pack-url: ""
+
+# ---- 以下は source: local のときだけ使う ----
+pack:
+  # 生成したリソースパックの出力先 (プラグインフォルダからの相対パス、または絶対パス)
+  # 既存パックのフォルダを指定すると assets/floatingimage/ だけを書き換える
+  output-dir: pack
+  # 出力先を zip にもまとめる
+  create-zip: true
+  zip-file: pack.zip
+  # pack.mcmeta が無い場合に書き込む pack_format (1.21.11 = 75)
+  pack-format: 75
+  # テクスチャの長辺の最大ピクセル数。これより大きい画像は縮小する
+  max-texture-size: 512
+
+display:
+  # /fimg place で大きさを省略したときの、画像の長辺の長さ (ブロック)
+  default-size: 2.0
+  # CENTER: 常にプレイヤーの方を向く / VERTICAL: 左右だけ向く / HORIZONTAL / FIXED: 固定
+  default-billboard: CENTER
+  # 描画距離の倍率 (1.0 = 64 ブロック程度)
+  view-range: 1.0
+  # /fimg place で目の前の何ブロック先に置くか
+  place-distance: 2.0
