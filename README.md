@@ -7,7 +7,7 @@ Paper 1.21.11 用のプラグイン！！Java 21 で動く！！
 前提プラグインはいらない！！ひとりで立てる……えらい……！！
 
 - ソースコード … [AzisabaNetwork/FloatingImage](https://github.com/AzisabaNetwork/FloatingImage) ！！ここ！！
-- リソースパックたち … [azisaba/resourcepaks](https://github.com/azisaba/resourcepaks) ！！画像はこっちに置く！！
+- リソースパックたち … [azisaba/resourcepaks](https://github.com/azisaba/resourcepacks) ！！画像はこっちに置く！！
 
 ## つかいかた！！
 
