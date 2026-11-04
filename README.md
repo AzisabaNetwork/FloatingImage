@@ -11,7 +11,7 @@ Paper 1.21.11 用のプラグイン！！Java 21 で動く！！
 
 ## つかいかた！！
 
-1. [azisaba/resourcepaks](https://github.com/azisaba/resourcepaks) に画像を置いて push する！！
+1. [azisaba/resourcepaks](https://github.com/azisaba/resourcepacks) に画像を置いて push する！！
 2. GitHub Actions がリソースパックに変換してくれる！！なんか……勝手にやってくれる……！！
 3. いつも通りリソースパックを更新する！！(sha1 とか)
 4. サーバーで `/fimg reload` ！！
