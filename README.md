@@ -7,11 +7,11 @@ Paper 1.21.11 用のプラグイン！！Java 21 で動く！！
 前提プラグインはいらない！！ひとりで立てる……えらい……！！
 
 - ソースコード … [AzisabaNetwork/FloatingImage](https://github.com/AzisabaNetwork/FloatingImage) ！！ここ！！
-- リソースパックたち … [azisaba/resourcepaks](https://github.com/azisaba/resourcepacks) ！！画像はこっちに置く！！
+- リソースパックたち … [azisaba/resourcepacks](https://github.com/azisaba/resourcepacks) ！！画像はこっちに置く！！
 
 ## つかいかた！！
 
-1. [azisaba/resourcepaks](https://github.com/azisaba/resourcepacks) に画像を置いて push する！！
+1. [azisaba/resourcepacks](https://github.com/azisaba/resourcepacks) に画像を置いて push する！！
 2. GitHub Actions がリソースパックに変換してくれる！！なんか……勝手にやってくれる……！！
 3. いつも通りリソースパックを更新する！！(sha1 とか)
 4. サーバーで `/fimg reload` ！！
@@ -53,7 +53,7 @@ Paper 1.21.11 用のプラグイン！！Java 21 で動く！！
 
 ## セットアップ！！
 
-### 1. azisaba/resourcepaks に追加する！！
+### 1. azisaba/resourcepacks に追加する！！
 
 ```
 floatingimage/images/        画像 (PNG / JPG) を置くところ！！
@@ -106,7 +106,7 @@ AzisabaNetwork/FloatingImage
   main に push → Actions がビルドして、Release に FloatingImage.jar を付ける！！
       │
       ▼ CI が最新版を取ってくる！！
-azisaba/resourcepaks
+azisaba/resourcepacks
   floatingimage/images/*.png を push！！
       │  Actions が CLI で変換して、パックの assets/floatingimage/ に出す！！
       │  → いつもの zip 化と Release！！
@@ -195,8 +195,8 @@ Actions がビルドして Release を作る！！タグは `action-v<番号>` �
 Release には `FloatingImage.jar` が付く！！名前はいつも同じ！！
 だから `releases/latest/download/FloatingImage.jar` で、いつでも最新版が取れる……ってコト！？！？
 
-- サーバーに入れるプラグインも、resourcepaks の CI が使う CLI も、この同じ jar ！！
-- 壊れた版を main に push すると、resourcepaks のビルドも一緒に壊れる！！ヤダーーーッ！！！
+- サーバーに入れるプラグインも、resourcepacks の CI が使う CLI も、この同じ jar ！！
+- 壊れた版を main に push すると、resourcepacks のビルドも一緒に壊れる！！ヤダーーーッ！！！
   push する前に、手元でビルドと動作を確かめてね！！
 
 ## ビルド！！
