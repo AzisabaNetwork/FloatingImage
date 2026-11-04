@@ -1,9 +1,10 @@
-# リソースパックリポジトリ (例: resourcepacks-life) の .github/workflows/ 用
-# 既存の CI の checkout 直後に「ここから追加」の 2 ステップを足したもの
+# azisaba/resourcepaks の .github/workflows/ 用
+# 既存の CI の checkout 直後に「ここから追加」の 3 ステップを足したもの
 #
 # リポジトリに追加するもの:
 #   floatingimage/images/*.png   画像 (pack.mcmeta が無いので zip にはならない)
-#   tools/FloatingImage.jar      このプラグインの *-all.jar
+#
+# FloatingImage.jar は AzisabaNetwork/FloatingImage の最新 Release から毎回ダウンロードする
 
 name: CI
 
@@ -31,8 +32,11 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: FloatingImage の最新版を取得する
+        run: curl -fsSL -o "$RUNNER_TEMP/FloatingImage.jar" https://github.com/AzisabaNetwork/FloatingImage/releases/latest/download/FloatingImage.jar
+
       - name: FloatingImage の画像をリソースパックに変換する
-        run: java -jar tools/FloatingImage.jar generate --images floatingimage/images --out "$FLOATINGIMAGE_PACK"
+        run: java -jar "$RUNNER_TEMP/FloatingImage.jar" generate --images floatingimage/images --out "$FLOATINGIMAGE_PACK"
       # ---- ここまで追加 ----
 
       - name: リソースパックとして機能するディレクトリを見つける

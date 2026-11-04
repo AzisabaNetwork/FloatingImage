@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    name: ビルド & リリース
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: ビルドする
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+
+      # リソースパック側の CI が releases/latest/download/FloatingImage.jar で取れるように、名前を固定する
+      - name: jar の名前を揃える
+        run: cp build/libs/*-all.jar FloatingImage.jar
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: action-v${{ github.run_number }}
+          files: FloatingImage.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

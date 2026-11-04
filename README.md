@@ -6,9 +6,12 @@
 Paper 1.21.11 用のプラグイン！！Java 21 で動く！！
 前提プラグインはいらない！！ひとりで立てる……えらい……！！
 
+- ソースコード … [AzisabaNetwork/FloatingImage](https://github.com/AzisabaNetwork/FloatingImage) ！！ここ！！
+- リソースパックたち … [azisaba/resourcepaks](https://github.com/azisaba/resourcepaks) ！！画像はこっちに置く！！
+
 ## つかいかた！！
 
-1. リソースパックのリポジトリに画像を置いて push する！！
+1. [azisaba/resourcepaks](https://github.com/azisaba/resourcepaks) に画像を置いて push する！！
 2. GitHub Actions がリソースパックに変換してくれる！！なんか……勝手にやってくれる……！！
 3. いつも通りリソースパックを更新する！！(sha1 とか)
 4. サーバーで `/fimg reload` ！！
@@ -50,21 +53,20 @@ Paper 1.21.11 用のプラグイン！！Java 21 で動く！！
 
 ## セットアップ！！
 
-### 1. リソースパックのリポジトリに追加する！！
+### 1. azisaba/resourcepaks に追加する！！
 
 ```
 floatingimage/images/        画像 (PNG / JPG) を置くところ！！
-tools/FloatingImage.jar      このプラグインの *-all.jar を名前を変えて置く！！
 <パックのフォルダ>/          いつものパック！！ここの assets/floatingimage/ に変換結果が入る！！
 ```
 
 - `floatingimage/` には `pack.mcmeta` がないから、zip が勝手に増えたりしない！！安心……！！
-- プラグインを更新したら `tools/FloatingImage.jar` も差し替える！！忘れたら……ハァ！？ってなる……！！
+- jar は置かなくていい！！CI が毎回、最新版を取ってくる！！(下の「リリース！！」を見てね)
 - 変換結果はコミットしない！！`<パックのフォルダ>/assets/floatingimage/` は `.gitignore` に入れておくと安全！！
 
 ### 2. CI に変換ステップを足す！！
 
-いまのワークフローの `actions/checkout` のすぐあとに、これを 2 つ足すだけ！！
+いまのワークフローの `actions/checkout` のすぐあとに、これを 3 つ足すだけ！！
 (全体の例は [`examples/resourcepack-ci.yml`](examples/resourcepack-ci.yml) ！！)
 
 ```yaml
@@ -73,15 +75,20 @@ tools/FloatingImage.jar      このプラグインの *-all.jar を名前を変�
           distribution: temurin
           java-version: '21'
 
+      - name: FloatingImage の最新版を取得する
+        run: curl -fsSL -o "$RUNNER_TEMP/FloatingImage.jar" https://github.com/AzisabaNetwork/FloatingImage/releases/latest/download/FloatingImage.jar
+
       - name: FloatingImage の画像をリソースパックに変換する
-        run: java -jar tools/FloatingImage.jar generate --images floatingimage/images --out <パックのフォルダ>
+        run: java -jar "$RUNNER_TEMP/FloatingImage.jar" generate --images floatingimage/images --out <パックのフォルダ>
 ```
+
+jar は `$RUNNER_TEMP` に置くから、パックの zip には入らない！！まぎれこまない……！！
 
 zip を作る前に画像が組み込まれるから、そのあとの zip 化と Release はそのまま！！なんとかなれーーーッ！！！
 
 ### 3. プラグインを入れる！！
 
-`FloatingImage-<version>-all.jar` を `plugins/` に入れて起動する！！
+[Release](https://github.com/AzisabaNetwork/FloatingImage/releases/latest) の `FloatingImage.jar` を `plugins/` に入れて起動する！！
 
 画像の一覧は、`server.properties` の `resource-pack` の zip から読む！！
 別の URL から読みたいときは `plugins/FloatingImage/config.yml` に書く！！
@@ -95,7 +102,11 @@ remote:
 ## しくみ！！
 
 ```
-リソースパックのリポジトリ (例: resourcepacks-life)
+AzisabaNetwork/FloatingImage
+  main に push → Actions がビルドして、Release に FloatingImage.jar を付ける！！
+      │
+      ▼ CI が最新版を取ってくる！！
+azisaba/resourcepaks
   floatingimage/images/*.png を push！！
       │  Actions が CLI で変換して、パックの assets/floatingimage/ に出す！！
       │  → いつもの zip 化と Release！！
@@ -176,10 +187,22 @@ assets/floatingimage/models/item/<ID>.json   縦横比に合わせた板のモ�
 assets/floatingimage/textures/item/<ID>.png  テクスチャ！！
 ```
 
+## リリース！！
+
+[AzisabaNetwork/FloatingImage](https://github.com/AzisabaNetwork/FloatingImage) の main に push すると、
+Actions がビルドして Release を作る！！タグは `action-v<番号>` ！！勝手にできる……！！
+
+Release には `FloatingImage.jar` が付く！！名前はいつも同じ！！
+だから `releases/latest/download/FloatingImage.jar` で、いつでも最新版が取れる……ってコト！？！？
+
+- サーバーに入れるプラグインも、resourcepaks の CI が使う CLI も、この同じ jar ！！
+- 壊れた版を main に push すると、resourcepaks のビルドも一緒に壊れる！！ヤダーーーッ！！！
+  push する前に、手元でビルドと動作を確かめてね！！
+
 ## ビルド！！
 
 ```bash
-gradle build
+./gradlew build
 ```
 
 `build/libs/FloatingImage-<version>-all.jar` が、プラグインにも CLI にもなる！！一石二鳥……ってコト！？！？
