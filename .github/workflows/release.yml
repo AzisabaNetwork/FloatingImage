@@ -30,7 +30,7 @@ jobs:
       - name: jar の名前を揃える
         run: cp build/libs/*-all.jar FloatingImage.jar
 
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           tag_name: action-v${{ github.run_number }}
           files: FloatingImage.jar
