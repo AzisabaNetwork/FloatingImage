@@ -107,7 +107,7 @@ class PackGenerator(private val logger: Logger) {
                   "light_emission": 15,
                   "faces": {
                     "south": { "uv": [0, 0, 16, 16], "texture": "#image" },
-                    "north": { "uv": [16, 0, 0, 16], "texture": "#image" }
+                    "north": { "uv": [0, 0, 16, 16], "texture": "#image" }
                   }
                 }
               ]
